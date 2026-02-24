@@ -8,10 +8,24 @@ const syne = Syne({
   display: "swap",
 });
 
+const baseUrl = "https://snapreport-psi.vercel.app";
+
 export const metadata: Metadata = {
   title: "SnapReport",
   description: "Before/After 報告ツール",
   manifest: "/manifest.json",
+  openGraph: {
+    title: "SnapReport",
+    description: "Before/After 報告ツール",
+    url: baseUrl,
+    siteName: "SnapReport",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SnapReport",
+    description: "Before/After 報告ツール",
+  },
 };
 
 export const viewport: Viewport = {
