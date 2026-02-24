@@ -4,7 +4,6 @@ const W = 1200;
 /** 黒線の太さ（外枠・Before/After間・フッター上）（添付画像参考） */
 const LINE_W = 2;
 const SLOT_W = (W - LINE_W) / 2;
-const SLOT_H = 560;
 const GAP = LINE_W;
 const FOOTER_H = 56;
 const LABEL_PADDING = 20;
@@ -91,7 +90,7 @@ async function drawSlot(
       ctx.beginPath();
       ctx.rect(x, y, w, h);
       ctx.clip();
-      const scale = Math.min(w / img.width, h / img.height);
+      const scale = Math.max(w / img.width, h / img.height);
       const sw = img.width * scale;
       const sh = img.height * scale;
       ctx.drawImage(img, x + (w - sw) / 2, y + (h - sh) / 2, sw, sh);
@@ -111,10 +110,14 @@ async function drawSlot(
  * 場所の Before/After ペアを1枚のPNG画像として生成しダウンロード
  * スタイル: ダークグレー2パネル / 白ラベル / 下部黒フッター（場所名・日付）
  */
-export async function generateAndDownload(loc: Location): Promise<void> {
+export async function generateAndDownload(
+  loc: Location,
+  aspectRatio: [number, number] = [16, 9]
+): Promise<void> {
   const pairs = Math.max(loc.before.length, loc.after.length);
   if (pairs === 0) return;
 
+  const SLOT_H = Math.round(SLOT_W * aspectRatio[1] / aspectRatio[0]);
   const contentH = pairs * SLOT_H + (pairs - 1) * GAP;
   const H = contentH + LINE_W + FOOTER_H;
 

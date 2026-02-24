@@ -9,8 +9,17 @@ type ReportTabProps = {
   onDelete: (locId: string) => void;
 };
 
+const RATIOS: { label: string; value: [number, number] }[] = [
+  { label: "16:9", value: [16, 9] },
+  { label: "4:3",  value: [4, 3]  },
+  { label: "1:1",  value: [1, 1]  },
+  { label: "3:4",  value: [3, 4]  },
+  { label: "9:16", value: [9, 16] },
+];
+
 export function ReportTab({ locations, onDelete }: ReportTabProps) {
   const [loading, setLoading] = useState<string | null>(null);
+  const [ratio, setRatio] = useState<[number, number]>([4, 3]);
 
   const completed = locations.filter(
     (l) => l.before.length > 0 && l.after.length > 0
@@ -19,7 +28,7 @@ export function ReportTab({ locations, onDelete }: ReportTabProps) {
   const handleDownload = async (loc: Location) => {
     setLoading(loc.id);
     try {
-      await generateAndDownload(loc);
+      await generateAndDownload(loc, ratio);
     } finally {
       setLoading(null);
     }
@@ -37,6 +46,30 @@ export function ReportTab({ locations, onDelete }: ReportTabProps) {
 
   return (
     <div className="space-y-4">
+      {/* 比率セレクター */}
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-[#666] shrink-0">比率</span>
+        <div className="flex gap-1">
+          {RATIOS.map((r) => {
+            const active = ratio[0] === r.value[0] && ratio[1] === r.value[1];
+            return (
+              <button
+                key={r.label}
+                type="button"
+                onClick={() => setRatio(r.value)}
+                className={
+                  active
+                    ? "text-xs px-2.5 py-1 rounded-md bg-[#e8ff5a] text-black font-medium"
+                    : "text-xs px-2.5 py-1 rounded-md bg-[#1f1f1f] text-[#888] border border-[#2a2a2a] hover:text-white transition-colors"
+                }
+              >
+                {r.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {completed.map((loc) => (
         <div
           key={loc.id}
