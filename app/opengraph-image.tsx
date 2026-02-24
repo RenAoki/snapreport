@@ -8,7 +8,7 @@ export const contentType = "image/png";
 
 export default async function OgImage() {
   const syneFont = await readFile(
-    path.join(process.cwd(), "public/fonts/Syne-Bold.woff2")
+    path.join(process.cwd(), "public/fonts/Syne-Bold.ttf")
   );
 
   return new ImageResponse(
