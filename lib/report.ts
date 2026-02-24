@@ -91,7 +91,7 @@ async function drawSlot(
       ctx.beginPath();
       ctx.rect(x, y, w, h);
       ctx.clip();
-      const scale = Math.max(w / img.width, h / img.height);
+      const scale = Math.min(w / img.width, h / img.height);
       const sw = img.width * scale;
       const sh = img.height * scale;
       ctx.drawImage(img, x + (w - sw) / 2, y + (h - sh) / 2, sw, sh);

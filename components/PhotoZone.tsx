@@ -64,7 +64,7 @@ export function PhotoZone({ mode, photos, onAdd, onRemove }: PhotoZoneProps) {
           {photos.map((src, i) => (
             <div key={i} className="relative aspect-square rounded-lg overflow-hidden bg-[#1f1f1f] group">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={src} alt="" className="w-full h-full object-cover" />
+              <img src={src} alt="" className="w-full h-full object-contain" />
               <button
                 type="button"
                 onClick={() => onRemove(i)}
