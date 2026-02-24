@@ -53,7 +53,6 @@ export function PhotoZone({ mode, photos, onAdd, onRemove }: PhotoZoneProps) {
         type="file"
         accept="image/*"
         multiple
-        capture="environment"
         className="hidden"
         onChange={handleChange}
       />
