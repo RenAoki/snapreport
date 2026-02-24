@@ -177,15 +177,20 @@ export async function generateAndDownload(loc: Location): Promise<void> {
 
   // ── ダウンロード ─────────────────────────────────────────────
   const dateForFile = new Date().toISOString().slice(0, 10);
-  const filename = `${loc.name}_report_${dateForFile}.png`;
+  const filename = `${loc.name}_report_${dateForFile}.jpg`;
 
-  canvas.toBlob((blob) => {
+  canvas.toBlob(async (blob) => {
     if (!blob) return;
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }, "image/png");
+    const file = new File([blob], filename, { type: "image/jpeg" });
+    if (navigator.canShare?.({ files: [file] })) {
+      await navigator.share({ files: [file], title: filename });
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }, "image/jpeg", 0.90);
 }
