@@ -1,23 +1,15 @@
 import { ImageResponse } from "next/og";
+import { readFile } from "fs/promises";
+import path from "path";
 
-export const runtime = "edge";
 export const alt = "SnapReport — Before/After 報告ツール";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-async function loadSyneFont() {
-  const css = await fetch(
-    "https://fonts.googleapis.com/css2?family=Syne:wght@700&display=swap",
-    { headers: { "User-Agent": "Mozilla/5.0" } }
-  ).then((r) => r.text());
-
-  const url = css.match(/src: url\((.+?)\) format\('woff2'\)/)?.[1];
-  if (!url) throw new Error("Syne font URL not found");
-  return fetch(url).then((r) => r.arrayBuffer());
-}
-
 export default async function OgImage() {
-  const syneFont = await loadSyneFont();
+  const syneFont = await readFile(
+    path.join(process.cwd(), "public/fonts/Syne-Bold.woff2")
+  );
 
   return new ImageResponse(
     (
