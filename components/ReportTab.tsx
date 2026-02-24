@@ -19,7 +19,7 @@ const RATIOS: { label: string; value: [number, number] }[] = [
 
 export function ReportTab({ locations, onDelete }: ReportTabProps) {
   const [loading, setLoading] = useState<string | null>(null);
-  const [ratio, setRatio] = useState<[number, number]>([4, 3]);
+  const [ratio, setRatio] = useState<[number, number]>([3, 4]);
 
   const completed = locations.filter(
     (l) => l.before.length > 0 && l.after.length > 0
