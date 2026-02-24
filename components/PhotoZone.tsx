@@ -12,7 +12,8 @@ type PhotoZoneProps = {
 };
 
 export function PhotoZone({ mode, photos, onAdd, onRemove }: PhotoZoneProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
+  const galleryRef = useRef<HTMLInputElement>(null);
 
   const isBefore = mode === "before";
   const color = isBefore ? "text-[#4a9eff]" : "text-[#3ddc84]";
@@ -28,28 +29,44 @@ export function PhotoZone({ mode, photos, onAdd, onRemove }: PhotoZoneProps) {
 
   return (
     <div>
-      {/* Zone tap area */}
-      <button
-        type="button"
-        onClick={() => inputRef.current?.click()}
-        className={cn(
-          "w-full border-2 border-dashed rounded-xl p-5 text-center transition-all",
-          borderActive
-        )}
-      >
-        <p className={cn("text-xs uppercase tracking-widest font-medium mb-1", color)}>
+      {/* Zone tap area: 2ボタン */}
+      <div className={cn("w-full border-2 border-dashed rounded-xl p-4 transition-all", borderActive)}>
+        <p className={cn("text-xs uppercase tracking-widest font-medium mb-3 text-center", color)}>
           {isBefore ? "Before" : "After"}
         </p>
-        <p className="text-xs text-[#666]">
-          {photos.length === 0
-            ? "タップして撮影 / 選択"
-            : `${photos.length}枚 — 追加する`}
-        </p>
-      </button>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => cameraRef.current?.click()}
+            className="flex-1 bg-[#1f1f1f] rounded-lg py-2 text-xs text-[#aaa] hover:text-white transition-colors"
+          >
+            カメラ
+          </button>
+          <button
+            type="button"
+            onClick={() => galleryRef.current?.click()}
+            className="flex-1 bg-[#1f1f1f] rounded-lg py-2 text-xs text-[#aaa] hover:text-white transition-colors"
+          >
+            ライブラリ
+          </button>
+        </div>
+        {photos.length > 0 && (
+          <p className="text-xs text-[#555] text-center mt-2">{photos.length}枚 — 追加する</p>
+        )}
+      </div>
 
-      {/* Hidden file input */}
+      {/* カメラ専用 input */}
       <input
-        ref={inputRef}
+        ref={cameraRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={handleChange}
+      />
+      {/* ライブラリ専用 input */}
+      <input
+        ref={galleryRef}
         type="file"
         accept="image/*"
         multiple
